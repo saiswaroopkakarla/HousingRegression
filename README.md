@@ -1,27 +1,47 @@
-# 🏡 Housing Regression - MLOps
+# Housing Price Regression - MLOps
 
-This repository contains a complete Machine Learning workflow to predict house prices using the Boston Housing dataset. It demonstrates modular code development, regression modeling, hyperparameter tuning, and CI/CD integration via GitHub Actions as part of an academic MLOps assignment.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)
+![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Ridge%20%7C%20Lasso%20%7C%20Linear-F7931E)
+
+A modular MLOps assignment demonstrating regression modelling and hyperparameter tuning on the Boston Housing dataset, with CI/CD automation via GitHub Actions.
 
 ---
 
-## 📂 Project Structure
+## Models & Results
+
+Three regression models evaluated on an 80/20 train/test split:
+
+| Model | Branch | Tuning |
+|---|---|---|
+| Linear Regression | `reg` | None |
+| Ridge Regression | `reg` | — |
+| Lasso Regression | `reg` | — |
+| Ridge (tuned) | `hyper` | GridSearchCV (`alpha`: 0.1, 1.0, 10.0, 100.0) |
+| Lasso (tuned) | `hyper` | GridSearchCV (`alpha`: 0.01, 0.1, 1.0, 10.0) |
+
+Evaluated with **MSE** and **R²** on each.
+
+---
+
+## Repository Structure
 
 ```
 HousingRegression/
-├── .github/workflows/ci.yml       # CI pipeline for automated testing
-├── regression.py                  # Main script for training models
-├── utils.py                       # Utility functions for data loading, modeling, tuning
-├── requirements.txt               # Environment dependencies
-├── README.md                      # This file
+├── .github/workflows/ci.yml   # GitHub Actions CI — runs on push to reg/hyper
+├── regression.py              # Entry point: train + evaluate all models
+├── utils.py                   # load_data(), train_models(), tune_and_train_models()
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## 🔧 Environment Setup
-
-Create a clean Conda environment and install the required packages:
+## Setup
 
 ```bash
+git clone https://github.com/saiswaroopkakarla/HousingRegression.git
+cd HousingRegression
 conda create -n houseprice python=3.10 -y
 conda activate houseprice
 pip install -r requirements.txt
@@ -29,83 +49,33 @@ pip install -r requirements.txt
 
 ---
 
-##  Dataset
-
-The **Boston Housing dataset** is used in this project. Due to deprecation in scikit-learn, the dataset is manually fetched from:
-
-📎 `http://lib.stat.cmu.edu/datasets/boston`
-
-The `load_data()` function in `utils.py` handles all loading and preprocessing.
-
----
-
-## 📊 Models Implemented
-
-### In `reg` branch:
-- Linear Regression
-- Ridge Regression
-- Lasso Regression
-
-### In `hyper` branch:
-- Same models with hyperparameter tuning using `GridSearchCV`
-
----
-
-## ⚙️ Evaluation Metrics
-
-Each model is evaluated using:
-- **Mean Squared Error (MSE)**
-- **R² Score (coefficient of determination)**
-
----
-
-## 🚀 How to Run
-
-Run the following command to execute training and evaluation:
+## Run
 
 ```bash
+# Train all models + print MSE and R² for each
 python regression.py
 ```
 
-This script prints performance metrics for each model.
+---
+
+## CI/CD Pipeline
+
+GitHub Actions workflow (`.github/workflows/ci.yml`) triggers on every push to the `reg` or `hyper` branches:
+
+```
+Checkout → Set up Python 3.10 → Install dependencies → Run regression.py
+```
+
+This validates that the training pipeline runs end-to-end without errors on every commit.
 
 ---
 
-## 🤖 GitHub Actions (CI/CD)
+## Dataset Note
 
-Every push to the `reg` and `hyper` branches triggers the CI pipeline (`ci.yml`) which:
-
-1. Sets up Python 3.10
-2. Installs dependencies
-3. Runs `regression.py` to validate the models
-
-You can view the logs under the **Actions** tab in this repo.
+Uses the **Boston Housing dataset** loaded directly from the CMU StatLib archive (`http://lib.stat.cmu.edu/datasets/boston`) — scikit-learn removed this dataset in v1.2 due to ethical concerns around the `B` (racial composition) feature. The `load_data()` function in `utils.py` fetches it manually and handles the raw file parsing.
 
 ---
 
-## 🧠 Branch Details
+## Author
 
-| Branch   | Description                               |
-|----------|-------------------------------------------|
-| `main`   | Final merged project                      |
-| `reg`    | Baseline regression models (no tuning)    |
-| `hyperb`  | Models with hyperparameter tuning         |
-
----
-
-## ✅ Deliverables
-
-- Modular code (utils.py, regression.py)
-- requirements.txt generated from pip freeze
-- CI pipeline using GitHub Actions
-- Reproducible environment via Conda
-- Evaluation results for both baseline and tuned models
-
----
-
-## 📬 Contact
-
-For any academic references, reach out to:  
-**Sai Swaroop** 
-g24ai1026@iitj.ac.in
-
+**Kakarla Sai Swaroop**, M25DE1023, IIT Jodhpur M.Tech Data Engineering
